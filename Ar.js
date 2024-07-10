@@ -1,9 +1,7 @@
-const util = require('util');
-
-sub = (a,b) => { if(a.v) return a; if(b.v) return b; return a-b-0n; }
-mul = (a,b) => { if(a.v) return a; if(b.v) return b; return a*b*1n; }
-div = (a,b) => { try{ if(a.v) return a; if(b.v) return b; return a/b*1n; }catch(e){ if(e.name==="RangeError") return {v:a,toString(){return this.v.toString();},[util.inspect.custom](){return this.v;}}; else throw e; } }
-inc = (a) => { if(a.v) return a; return a+1n; }
+inc = (a) => { if(typeof(a.v)==="bigint") return a; return 1n+a; }
+sub = (a,b) => { if(typeof(a.v)==="bigint") return a; if(typeof(b.v)==="bigint") return b; return 0n+a-b; }
+mul = (a,b) => { if(typeof(a.v)==="bigint") return a; if(typeof(b.v)==="bigint") return b; return 0n+a*b; }
+div = (a,b) => { if(typeof(a.v)==="bigint") return a; if(typeof(b.v)==="bigint") return b; if(b!==0n) return 0n+a/b; else return {v:a,toString(a){return this.v.toString(a);},valueOf(){return this.v;},[require("util").inspect.custom](){return this.v;}}; }
 
 zero = (a) => sub(a,a)
 one = (a) => inc(zero(a))
