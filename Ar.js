@@ -1,7 +1,8 @@
-inc = (a) => { if(typeof(a.v)==="bigint") return a; return 1n+a; }
-sub = (a,b) => { if(typeof(a.v)==="bigint") return a; if(typeof(b.v)==="bigint") return b; return 0n+a-b; }
-mul = (a,b) => { if(typeof(a.v)==="bigint") return a; if(typeof(b.v)==="bigint") return b; return 0n+a*b; }
-div = (a,b) => { if(typeof(a.v)==="bigint") return a; if(typeof(b.v)==="bigint") return b; if(b!==0n) return 0n+a/b; else return {v:a,toString(a){return this.v.toString(a);},valueOf(){return this.v;},[require("util").inspect.custom](){return this.v;}}; }
+inc = (a) => (typeof(a.v)==="bigint") ? a : 1n+a
+sub = (a,b) => (typeof(a.v)==="bigint") ? a : ((typeof(b.v)==="bigint") ? b : 0n+a-b)
+mul = (a,b) => (typeof(a.v)==="bigint") ? a : ((typeof(b.v)==="bigint") ? b : 0n+a*b)
+div = (a,b) => (typeof(a.v)==="bigint") ? a : ((typeof(b.v)==="bigint") ? b : ((b!==0n) ? 0n+a/b : {v:a,toString(a){return this.v.toString(a);},valueOf(){return this.v;}}))
+/* for correct logging of gap values */ const originalLog = console.log; console.log = (...args) => originalLog(...args.map((a)=>a.valueOf?a.valueOf():a));
 
 zero = (a) => sub(a,a)
 one = (a) => inc(zero(a))
